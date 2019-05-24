@@ -1,6 +1,7 @@
 // GLOBAL VARIABLES
 
 var displayTimer = 30;
+var countdown;
 var correct = 0;
 var wrong = 0;
 
@@ -13,31 +14,37 @@ $(document).ready(function() {
 
 $(".answer").hide();
 
-$("#start").on("click", function(){
+$("#start").on("click", function(){ //once "start" is clicked, 
 
 $("p").empty(); //empties the child of the p tag
 $("#start").remove(); //removes the parent and child of button
 
-timerCountdown();
+timerStart();
 displayQuestions();
 
 });
 
-function timerCountdown() {
+function timerStart() { //timer countdown decrements by 1 unit per second,
 
-    //display timer
-    //  var decrement = ;
-     var countdown = setInterval(displayTimer--, 1000);
-
-    // var display = $("<div>");
-
-    // $("<h1>").append(display);
-
-    // display.text("Time Remaining: " +countdown);
-
-    console.log(countdown);
+   countdown = setInterval(timerCountdown, 1000);
+   timerCountdown();
 
 }
+
+function timerCountdown() { //
+
+    //display timer
+    displayTimer--;
+
+    if (displayTimer === 0) {
+        clearInterval(countdown);
+    }
+
+    $(".displayTimer").html("Time left: " + displayTimer);
+    console.log(displayTimer);
+
+}
+
 
 function displayQuestions() {
 
@@ -110,13 +117,6 @@ function displayQuestions() {
     displayAnswerBtns();
 };
 
-btn.on("click", function(){
-    //go to correct answer page
-    
-
-    // pTag.append(btnCreate);
-
-});
 
 function displayAnswerBtns() {
     // displays all 4 answers as buttons
