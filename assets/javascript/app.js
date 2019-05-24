@@ -11,11 +11,13 @@ var btn = $("button");
 
 $(document).ready(function() {
 
+$(".answer").hide();
 
 $("#start").on("click", function(){
 
 $("p").empty(); //empties the child of the p tag
-$("button").remove(); //removes the parent and child of button
+$("#start").remove(); //removes the parent and child of button
+
 timerCountdown();
 displayQuestions();
 
@@ -96,8 +98,11 @@ function displayQuestions() {
     var answerArr = (Object.values(questionObj[i].answers)); //returns object values into an array
 
     for (var i = 0; i < answerArr.length; i++) { //for loop to create a button for every answer
-        btn.append(answerArr[i]);
-        pTag.append("<br><br>" + answerArr[i]);
+        
+        var btnCreate = $('<br><br><button type="button" class="btn btn-info">' + answerArr[i] + '</button><br>');
+        
+        btnCreate.appendTo(pTag); 
+    
     }
 
     console.log(answerArr.length);
@@ -107,6 +112,10 @@ function displayQuestions() {
 
 btn.on("click", function(){
     //go to correct answer page
+    
+
+    // pTag.append(btnCreate);
+
 });
 
 function displayAnswerBtns() {
