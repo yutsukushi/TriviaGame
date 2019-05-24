@@ -1,5 +1,11 @@
 // GLOBAL VARIABLES
 
+var displayTimer = 30;
+var correct = 0;
+var wrong = 0;
+
+var pTag = $("p");
+var btn = $("button");
 
 //-----------------------------------------------------------------------
 
@@ -10,20 +16,26 @@ $("#start").on("click", function(){
 
 $("p").empty(); //empties the child of the p tag
 $("button").remove(); //removes the parent and child of button
+timerCountdown();
 displayQuestions();
 
 });
 
-// function timerCountdown() {
+function timerCountdown() {
 
-//     setTimeout(displayQuestion, 1000 * 30);
-//     setTimeout(displayFourAnswers, 1000 * 30);
+    //display timer
+    //  var decrement = ;
+     var countdown = setInterval(displayTimer--, 1000);
 
-//     //display timer
-//     var displayTimer = 30;
+    // var display = $("<div>");
 
+    // $("<h1>").append(display);
 
-// }
+    // display.text("Time Remaining: " +countdown);
+
+    console.log(countdown);
+
+}
 
 function displayQuestions() {
 
@@ -31,80 +43,110 @@ function displayQuestions() {
     //set up a variable with the index 
     //if question is answered, display answer
     //move onto next question after alotted time.
+    // increment index so it chooses the next question in object array
 
     var i = 0;
 
     var questionObj = [{
-        q1: "What is the only U.S. state that only borders another state?"
-        // answers: {
-        //     a: "Rhode Island",
-        //     b: "Maine", //Maine only shares a border with New Hampshire
-        //     c: "Washington",
-        //     d: "Florida"
-        // },
+        q: "What is the only U.S. state that borders another state?",
+        answers: {
+            a : "A: Rhode Island",
+            b : "B: Maine", //Maine only shares a border with New Hampshire
+            c : "C: Washington",
+            d : "D: Florida"
+        }
     }, {
-        q2: "Name the number that is three more than one-fifth of one-tenth of one-half of 5,000"
-        // answers: {
-        //     a: 503,
-        //     b: 103,
-        //     c: 53, //working backwards leads to 53
-        //     d: 108
-        // }
-
+        q: "Name the number that is three more than one-fifth of one-tenth of one-half of 5,000",
+        answers: {
+            a: 503,
+            b: 103,
+            c: 53, //working backwards leads to 53
+            d: 108
+        }
     }, {
-        q3: "1, 1, 2, 3, 5, 8, 13, _, 34: What's the missing number?"
-        // answers: {
-        //     a: 20,
-        //     b: 21,
-        //     c: 25,
-        //     d: 17
-        // }
+        q: "1, 1, 2, 3, 5, 8, 13, _, 34: What's the missing number?",
+        answers: {
+            a: 20,
+            b: 21, //answer
+            c: 25,
+            d: 17
+        }
     }, {
-        q4: "What's the oldest continuously inhabited city in the world?"
-        // answers: {
-        //     a: Istanbul, Turky,
-        //     b: Athens, Greece,
-        //     c: Jerusalem,
-        //     d: Damascus, Syria
-        // }
+        q: "What's the oldest continuously inhabited city in the world?",
+        answers: {
+            a: "Istanbul, Turky",
+            b: "Athens, Greece",
+            c: "Jerusalem",
+            d: "Damascus, Syria" //answer
+        }
     }, {
-        q5: "Which of these cars did James Bond not drive in any of the James Bond films?"
-        // answers: {
-        //     a: Bentley,
-        //     b: Toyota,
-        //     c: Acura,
-        //     d: Mercury
-        // }
+        q: "Which of these cars did James Bond not drive in any of the James Bond films?",
+        answers: {
+            a: "Bentley",
+            b: "Toyota",
+            c: "Acura", //answer
+            d: "Mercury"
+        }
     }];
 
-    // var chosenQuestion = Math.floor(Math.random() * 5);
-    // console.log(chosenQuestion);
-    // console.log(questionObj[chosenQuestion]);
-    console.log(questionObj[i]);
-
-    $("<p>").html(questionObj[i]);
-
+   
     
+    pTag.append(questionObj[i].q); //successfully displays question on screen
+    
+    var answerArr = (Object.values(questionObj[i].answers)); //returns object values into an array
+
+    for (var i = 0; i < answerArr.length; i++) { //for loop to create a button for every answer
+        btn.append(answerArr[i]);
+        pTag.append("<br><br>" + answerArr[i]);
+    }
+
+    console.log(answerArr.length);
+
+    displayAnswerBtns();
 };
 
+btn.on("click", function(){
+    //go to correct answer page
+});
 
-function displayFourAnswers() {
+function displayAnswerBtns() {
+    // displays all 4 answers as buttons
+
+    // var btn = $("button");
+
+    // for (var i = 0; i < answers.length; i++) {
+    //     btn.append(answerArr[i]);
+    // }
+    // when user clicks on a button, count user's wrong/correct answers
+    // var correct = 0; increment++; 
+    // var wrong = 0; increment++;
 
 }
 
 function ifCorrectAnswerClicked() {
+//display the correct result
+//"Correct!"
+//after 15s, move onto next question
 
 }
 
 function ifWrongAnswerClicked() {
+    // display the correct result
+    //"Incorrect: the answer is _____"
+    // after 15s, move onto next question
 
 }
 
 function displayResults() {
-
+//when questions are all answered
+// # of questions answered correctly, from displayFourAnswers
+// # of questions answered wrong, from displayFourAnswers
+// display start over button
 }
 
 function startOver() {
+// when clicked remove contents of page
+// displayQuestions() function
 
 }
 
