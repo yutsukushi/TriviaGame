@@ -10,9 +10,7 @@ var btn = $("button");
 
 //-----------------------------------------------------------------------
 
-$(document).ready(function() {
-
-$(".answer").hide();
+$(document).ready(function() { //once page is fully loaded, then the game is ready to begin.
 
 $("#start").on("click", function(){ //once "start" is clicked, 
 
@@ -31,7 +29,7 @@ function timerStart() { //timer countdown decrements by 1 unit per second,
 
 }
 
-function timerCountdown() { //
+function timerCountdown() { 
 
     //display timer
     displayTimer--;
@@ -41,10 +39,8 @@ function timerCountdown() { //
     }
 
     $(".displayTimer").html("Time left: " + displayTimer);
-    console.log(displayTimer);
 
 }
-
 
 function displayQuestions() {
 
@@ -59,54 +55,54 @@ function displayQuestions() {
     var questionObj = [{
         q: "What is the only U.S. state that borders another state?",
         answers: {
-            a : "A: Rhode Island",
-            b : "B: Maine", //Maine only shares a border with New Hampshire
-            c : "C: Washington",
-            d : "D: Florida"
-        }
+            a: "A: Rhode Island",
+            b: "B: Maine", //Maine only shares a border with New Hampshire
+            c: "C: Washington",
+            d: "D: Florida"
+        }, 
+            b: "B: Maine"
+           
     }, {
         q: "Name the number that is three more than one-fifth of one-tenth of one-half of 5,000",
         answers: {
-            a: 503,
-            b: 103,
-            c: 53, //working backwards leads to 53
-            d: 108
+            a: "A: " + 503,
+            b: "B: " + 103,
+            c: "C: " + 53, //working backwards leads to 53
+            d: "D: " + 108
         }
     }, {
         q: "1, 1, 2, 3, 5, 8, 13, _, 34: What's the missing number?",
         answers: {
-            a: 20,
-            b: 21, //answer
-            c: 25,
-            d: 17
+            a: "A: " + 20,
+            b: "B: " + 21, //answer
+            c: "C: " + 25,
+            d: "D: " + 17
         }
     }, {
         q: "What's the oldest continuously inhabited city in the world?",
         answers: {
-            a: "Istanbul, Turky",
-            b: "Athens, Greece",
-            c: "Jerusalem",
-            d: "Damascus, Syria" //answer
+            a: "A: Istanbul, Turky",
+            b: "B: Athens, Greece",
+            c: "C: Jerusalem",
+            d: "D: Damascus, Syria" //answer
         }
     }, {
         q: "Which of these cars did James Bond not drive in any of the James Bond films?",
         answers: {
-            a: "Bentley",
-            b: "Toyota",
-            c: "Acura", //answer
-            d: "Mercury"
+            a: "A: Bentley",
+            b: "B: Toyota",
+            c: "C: Acura", //answer
+            d: "D: Mercury"
         }
     }];
 
-   
-    
     pTag.append(questionObj[i].q); //successfully displays question on screen
     
     var answerArr = (Object.values(questionObj[i].answers)); //returns object values into an array
 
     for (var i = 0; i < answerArr.length; i++) { //for loop to create a button for every answer
         
-        var btnCreate = $('<br><br><button type="button" class="btn btn-info">' + answerArr[i] + '</button><br>');
+        var btnCreate = $('<br><br><button type="button" class="btn btn-info answerBtn">' + answerArr[i] + '</button><br>');
         
         btnCreate.appendTo(pTag); 
     
@@ -114,23 +110,28 @@ function displayQuestions() {
 
     console.log(answerArr.length);
 
-    displayAnswerBtns();
 };
 
+pTag.on("click", ".answerBtn", function(){ //delegated functions specifically for anwer buttons when they are created.
 
-function displayAnswerBtns() {
-    // displays all 4 answers as buttons
+    var clickedBtn = $(this).val(); //this variable isn't executing bc its not attached to anything.
+    
+    if (clickedBtn === -1) { //if button clicked doesn't have a value, You're wrong!
 
-    // var btn = $("button");
+        wrong++;
+        console.log("wrong: " + wrong);
+        //remove
 
-    // for (var i = 0; i < answers.length; i++) {
-    //     btn.append(answerArr[i]);
-    // }
-    // when user clicks on a button, count user's wrong/correct answers
-    // var correct = 0; increment++; 
-    // var wrong = 0; increment++;
+    } else { //if the button clicked has a value, you're right!
 
-}
+        correct++;
+        console.log("right: " + correct);
+
+    }
+    
+    console.log("it worked");
+
+});
 
 function ifCorrectAnswerClicked() {
 //display the correct result
