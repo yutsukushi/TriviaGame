@@ -1,12 +1,17 @@
 // GLOBAL VARIABLES
 
-var displayTimer = 30;
+var timer = 30;
 var countdown;
+var nextQTimer;
 var correct = 0;
 var wrong = 0;
+var unanswered = 0;
 
 var pTag = $("p");
 var btn = $("button");
+var question = $(".question");
+
+var displayTimer = $(".displayTimer");
 
 //-----------------------------------------------------------------------
 
@@ -32,15 +37,16 @@ function timerStart() { //timer countdown decrements by 1 unit per second,
 function timerCountdown() { 
 
     //display timer
-    displayTimer--;
+    timer--;
 
-    if (displayTimer === 0) {
+    if (timer === 0) {
         clearInterval(countdown);
     }
 
-    $(".displayTimer").html("Time left: " + displayTimer);
+    displayTimer.html("Time left: " + timer);
 
 }
+
 
 function displayQuestions() {
 
@@ -50,100 +56,141 @@ function displayQuestions() {
     //move onto next question after alotted time.
     // increment index so it chooses the next question in object array
 
-    var i = 0;
+    i = 0;
 
-    var questionObj = [{
-        q: "What is the only U.S. state that borders another state?",
-        answers: {
-            a: "A: Rhode Island",
-            b: "B: Maine", //Maine only shares a border with New Hampshire
-            c: "C: Washington",
-            d: "D: Florida"
-        }, 
-            b: "B: Maine"
-           
-    }, {
-        q: "Name the number that is three more than one-fifth of one-tenth of one-half of 5,000",
-        answers: {
-            a: "A: " + 503,
-            b: "B: " + 103,
-            c: "C: " + 53, //working backwards leads to 53
-            d: "D: " + 108
-        }
-    }, {
-        q: "1, 1, 2, 3, 5, 8, 13, _, 34: What's the missing number?",
-        answers: {
-            a: "A: " + 20,
-            b: "B: " + 21, //answer
-            c: "C: " + 25,
-            d: "D: " + 17
-        }
-    }, {
-        q: "What's the oldest continuously inhabited city in the world?",
-        answers: {
-            a: "A: Istanbul, Turky",
-            b: "B: Athens, Greece",
-            c: "C: Jerusalem",
-            d: "D: Damascus, Syria" //answer
-        }
-    }, {
-        q: "Which of these cars did James Bond not drive in any of the James Bond films?",
-        answers: {
-            a: "A: Bentley",
-            b: "B: Toyota",
-            c: "C: Acura", //answer
-            d: "D: Mercury"
-        }
-    }];
+    questionObj = [{
+    q: "What is the only U.S. state that borders another state?",
+    correct: "B: Maine",
+    answers: {
+        a: "A: Rhode Island",
+        b: "B: Maine", //Maine only shares a border with New Hampshire
+        c: "C: Washington",
+        d: "D: Florida"
+    }
+       
+}, {
+    q: "Name the number that is three more than one-fifth of one-tenth of one-half of 5,000",
+    answers: {
+        a: "A: " + 503,
+        b: "B: " + 103,
+        c: "C: " + 53, //working backwards leads to 53
+        d: "D: " + 108
+    }
+}, {
+    q: "1, 1, 2, 3, 5, 8, 13, _, 34: What's the missing number?",
+    answers: {
+        a: "A: " + 20,
+        b: "B: " + 21, //answer
+        c: "C: " + 25,
+        d: "D: " + 17
+    }
+}, {
+    q: "What's the oldest continuously inhabited city in the world?",
+    answers: {
+        a: "A: Istanbul, Turky",
+        b: "B: Athens, Greece",
+        c: "C: Jerusalem",
+        d: "D: Damascus, Syria" //answer
+    }
+}, {
+    q: "Which of these cars did James Bond not drive in any of the James Bond films?",
+    answers: {
+        a: "A: Bentley",
+        b: "B: Toyota",
+        c: "C: Acura", //answer
+        d: "D: Mercury"
+    }
+}];
 
-    pTag.append(questionObj[i].q); //successfully displays question on screen
+    question.html(questionObj[i].q); //successfully displays question on screen
     
     var answerArr = (Object.values(questionObj[i].answers)); //returns object values into an array
 
     for (var i = 0; i < answerArr.length; i++) { //for loop to create a button for every answer
         
-        var btnCreate = $('<br><br><button type="button" class="btn btn-info answerBtn">' + answerArr[i] + '</button><br>');
+        btnCreate = $('<br><br><button type="button" class="btn btn-info answerBtn">' + answerArr[i] + '</button><br>');
         
-        btnCreate.appendTo(pTag); 
-    
+        // btnCreate.appendTo(pTag); 
+        pTag.append(btnCreate);
     }
 
-    console.log(answerArr.length);
+    var answer = $(".answerBtn");
 
-};
+    console.log(btnCreate === questionObj[i].correct);
 
-pTag.on("click", ".answerBtn", function(){ //delegated functions specifically for anwer buttons when they are created.
+    pTag.on("click", ".answerBtn", function(){ //delegated functions specifically for anwer buttons when they are created.
 
-    var clickedBtn = $(this).val(); //this variable isn't executing bc its not attached to anything.
+        if (btnCreate === questionObj[i].correct) { //if the button clicked has a value, you're right!
     
-    if (clickedBtn === -1) { //if button clicked doesn't have a value, You're wrong!
-
-        wrong++;
-        console.log("wrong: " + wrong);
-        //remove
-
-    } else { //if the button clicked has a value, you're right!
+        //display the correct result
+        //"Correct!"
+        //after 15s, move onto next question
 
         correct++;
+        question.hide();
+        answer.hide();
+        displayTimer.hide();
+
+        pTag.append("You're correct!");
+        answerReveal(); 
         console.log("right: " + correct);
 
-    }
+        } else if (displayTimer === 0) {
+            // display the correct result
+            // //"Ran out of time! The correct answer is "
+            // // after 15s, move onto next question
+
+            unanswered++;
+            question.hide();
+            answer.hide();
+            displayTimer.hide();
+        
+            pTag.append("Ran out of time! The correct answer is " + questionObj[i].correct);
+            answerReveal(); 
+            console.log("unanswered: " + unanswered);
+            
+        } else {
+
+            wrong++;
+            question.hide();
+            answer.hide();
+            displayTimer.hide();
+
+            pTag.append("Oops! The correct answer is " + questionObj[i].correct);
+            answerReveal();
+            console.log("wrong: " + wrong);
+        
+        }
+        
+        console.log("it worked");
+        
+    });
+
+    // if (displayTimer === 0) { //if timer hits 0, You're wrong!
     
-    console.log("it worked");
+    // // display the correct result
+    // //"Ran out of time! The correct answer is "
+    // // after 15s, move onto next question
 
-});
+    // question.hide();
+    // answer.hide();
+    // displayTimer.hide();
 
-function ifCorrectAnswerClicked() {
-//display the correct result
-//"Correct!"
-//after 15s, move onto next question
+    // unanswered++;
+    // pTag.append("Ran out of time! The correct answer is " + questionObj[i].correct);
+    // console.log("wrong: " + wrong);
+    
+    // }
+    
+};
 
+function answerReveal() {
+ nextQTimer = setTimeout(nextQuestion, 1000 * 10); //after 10s, display next question and answers
 }
 
-function ifWrongAnswerClicked() {
-    // display the correct result
-    //"Incorrect: the answer is _____"
-    // after 15s, move onto next question
+function nextQuestion() { //display next question and answers
+    // i++ for the next question
+    // question.show(questionObj[i].q)
 
 }
 
