@@ -1,7 +1,6 @@
 // GLOBAL VARIABLES
 
-var allowedTime = 30;
-
+var allowedTime = 5;
 
 var timer = allowedTime;
 var countdown;
@@ -9,11 +8,11 @@ var nextQTimer;
 var correct = 0;
 var wrong = 0;
 var unanswered = 0;
+var i = 0;
 
 var pTag = $("p");
 var questionHTML = $(".question");
 var answerHTML = $(".answers");
-
 var displayTimer = $(".displayTimer");
 
 //-----------------------------------------------------------------------
@@ -25,8 +24,8 @@ $("#start").on("click", function(){ //once "start" is clicked,
 $("p").empty(); //empties the child of the p tag
 $("#start").remove(); //removes the parent and child of button
 
-timerStart();
-displayQuestions();
+timerStart(); //calls timerStart function
+displayQuestions(); //calls displayQuestions function
 
 });
 
@@ -40,17 +39,26 @@ function timerStart() { //timer countdown decrements by 1 unit per second,
 
 function timerCountdown() { 
 
-    //display timer
-    timer--;
+    timer--; //timer decrements from 30seconds
 
-    if (timer === 0) {
-        clearInterval(countdown);
+    if (timer === 0) { //if timer hits 0,
+
+        clearInterval(countdown); //stop counter at 0
+
+        unanswered++; //increments unanswered counter by 1
+
+        clearQuestion(); //calls clearQuestion function to empty the HTML tags
+
+        pTag.append("You ran out of time! The correct answer is " + questionObjs[i].correct); //displays that you ran out of time, and displays correct answer
+
+        //needs to be connected to a setTimeOut to move onto the next question.
+            
+        console.log("Unanswered: " + unanswered);
     }
 
-    displayTimer.html("Time left: " + timer);
+    displayTimer.html("Time left: " + timer); //displays the timer countdown on displayTimer div tag
 
 }
-
 
 function displayQuestions() { // loops through all objects in questionObjs
 
@@ -108,102 +116,103 @@ function displayQuestions() { // loops through all objects in questionObjs
     }
 }];
 
-var i = 0;
-
 displayQuestion(questionObjs[i], answerClickHandler);
     // wait for the next question
-
-    // if (displayTimer === 0) { //if timer hits 0, You're wrong!
-    
-    // // display the correct result
-    // //"Ran out of time! The correct answer is "
-    // // after 15s, move onto next question
-
-    // question.hide();
-    // answer.hide();
-    // displayTimer.hide();
-
-    // unanswered++;
-    // pTag.append("Ran out of time! The correct answer is " + questionObjs[i].correct);
-    // console.log("wrong: " + wrong);
-    
-    // }
 
     function answerClickHandler() {
         console.log(this.id);
         clearQuestion();
         if (this.id === questionObjs[i].correct) { //if the button clicked has a value, you're right!
-            //display the correct result
-            //"Correct!"
-            //after 15s, move onto next question
-            correct++;
+            
+            correct++; //increments 1, to the correct counter
 
-            pTag.append("You're correct!");
+            pTag.append("You're correct!"); //"Correct!"
+            
             console.log("right: " + correct);
-
-        // } else if (displayTimer === 0) {
-        //     // display the correct result
-        //     // //"Ran out of time! The correct answer is "
-        //     // // after 15s, move onto next question
-
-        //     unanswered++;
-        //     question.hide();
-        //     answer.hide();
-        //     displayTimer.hide();
-        
-        //     pTag.append("Ran out of time! The correct answer is " + questionObjs[i].correct);
-        //     answerReveal(); 
-        //     console.log("unanswered: " + unanswered);
             
         } else {
-            wrong++;
-            pTag.append("Oops! The correct answer is " + questionObjs[i].correct);
-            //answerReveal();
+
+            wrong++; //incremenets 1, to the wrong counter
+
+            pTag.append("Oops! The correct answer is " + questionObjs[i].correct); //display the correct result
+            
             console.log("wrong: " + wrong);
         
         }
+
         setTimeout(function(){
-            i++;
-            pTag.empty();
-            if (i >= questionObjs.length) {
-                pTag.append("This is how you did...<br>Correct: " + correct + "<br>Incorrect: " + wrong + "<br>Unanswered: " + unanswered);
-                pTag.append($('<br><br><button type="button" class="btn btn-info" id="tryAgain">' + "Try again?" + '</button><br>'));
-                
-                tryAgain();
-            } else {
-                displayQuestion(questionObjs[i], answerClickHandler);
+
+            i++; //increments index by 1
+
+            if (i >= questionObjs.length) { //if index is greater than or equal to the length of the question object,
+
+                var endResults = $(".endResults");
+                var tryAgainBtn = $('<br><br><button type="button" class="btn btn-info" id="tryAgain">' + "Try again?" + '</button><br>'); //try again button
+
+                endResults.append("This is how you did...<br>Correct: " + correct + "<br>Incorrect: " + wrong + "<br>Unanswered: " + unanswered); //then display the results of the trivia questions
+                endResults.append('<br><br><a href="https://www.rd.com/culture/trivia-questions/">https://www.rd.com/culture/trivia-questions/</a>'); //and display the link to the actual article where I got the questions from
+
+                tryAgainBtn.on("click", function() { //when the user clicks the "try again" button
+
+                    tryAgainBtn.empty(); //get rid of the button
+                    endResults.empty(); //get rid of the results
+
+                    tryAgain(); //reset the counters, timer, and show the questions
+
+                })
+
+                endResults.append(tryAgainBtn); //display the "try again" button to the end results div tag
+            
+            } else { //if index isn't greater than the object length, 
+
+                displayQuestion(questionObjs[i], answerClickHandler); //then continue to display the next question and the right answer page
+
             }
-        }, 1000);
+            
+            pTag.empty(); //empty p tag for an empty p section
+            
+        }, 1000); //time out to apply the changes
+
     }
     
 }
 
-function displayQuestion(questionObj, clickHdlr) {
-    timerStart();
-    displayTimer.show();
+function displayQuestion(questionObj, clickHdlr) { //displays question with corresponding answer buttons
+
+    timerStart(); //starts timer
+    displayTimer.show(); //displays timer on display timer div tag
     questionHTML.html(questionObj.q); //successfully displays question on screen
 
-    for (var questionLetter in questionObj.answers) { //for loop to create a button for every answer
-        var answerText = questionObj.answers[questionLetter];
-        btn = $('<br><br><button type="button" class="btn btn-info answerBtn" id="' + questionLetter + '">' + answerText + '</button><br>');
+    for (var questionLetter in questionObj.answers) { //for each loop to create a button for every answer specifically in the object answers
+
+        var answerText = questionObj.answers[questionLetter]; //holds the letter value for every answer displayed
+
+        var btn = $('<br><br><button type="button" class="btn btn-info answerBtn" id="' + questionLetter + '">' + answerText + '</button><br>'); // gives unique letter ID for the if conditional on finding the right answer
         
-        btn.on("click", clickHdlr);
-        answerHTML.append(btn);
+        btn.on("click", clickHdlr); //on click function for btn
+        answerHTML.append(btn); //displays btn to the "answers" div tag
+
     }
+
     console.log(answerHTML);   
 }
 
-function clearQuestion() {
-    questionHTML.empty();
-    answerHTML.empty();
-    displayTimer.hide();
+function clearQuestion() { //clears html tags of content
+
+    questionHTML.empty(); //empties question from  HTML tag
+    answerHTML.empty(); //empties answer from HTML tag
+    displayTimer.hide(); //hides display timer
 }
 
-function tryAgain() {
-    timerStart();
-    displayQuestions();
+function tryAgain() { //resets counters
 
+    correct = 0; 
+    wrong = 0;
+    unanswered = 0;
+
+    displayTimer.show(); //shows timer on HTML again
+    timerStart(); //starts timer
+    displayQuestions(); //displays questions
 }
-
 
 });
