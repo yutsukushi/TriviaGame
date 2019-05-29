@@ -3,7 +3,7 @@ button:hover {
 }
 
 body {
-    background-image: url(HW-5\TriviaGame\assets\images\prism.png);
+    background-image: url("/HW-5/TriviaGame/assets/images/prism.png");
 }
 
 h1 {
@@ -11,22 +11,27 @@ h1 {
     font-size: 60px;
     text-align: center;
     margin-top: 4rem;
+    color: #eaeaea;
 }
 
 p {
     font-size: 40px;
+    color: #eaeaea;
 }
 
 div {
     font-family: 'Cabin Sketch', cursive;
     font-size: 40px;
+    color: #eaeaea;
 }
 
 .displayTimer {
     margin-top: 30px;
+    color: #eaeaea;
 }
 
 .btn {
     padding: .375rem 3.75rem;
     font-size: 2rem;
+    border-radius: 18px;
 }

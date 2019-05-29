@@ -165,7 +165,7 @@ function answerClickHandler() {
         if (i >= questionObjs.length) { //if index is greater than or equal to the length of the question object,
 
             var endResults = $(".endResults");
-            var tryAgainBtn = $('<br><br><button type="button" class="btn btn-info" id="tryAgain">' + "Try again?" + '</button><br>'); //try again button
+            var tryAgainBtn = $('<br><br><button type="button" class="btn btn-secondary" id="tryAgain">' + "Try again?" + '</button><br>'); //try again button
 
             endResults.append("This is how you did...<br>Correct: " + correct + "<br>Incorrect: " + wrong + "<br>Unanswered: " + unanswered); //then display the results of the trivia questions
             endResults.append('<br><br>These trivia questions came from <a href="https://www.rd.com/culture/trivia-questions/">https://www.rd.com/culture/trivia-questions/</a> They have a lot more tricky questions!'); //and display the link to the actual article where I got the questions from
@@ -203,7 +203,7 @@ function displayQuestion(questionObj, clickHdlr) { //displays question with corr
 
         var answerText = questionObj.answers[questionLetter]; //holds the letter value for every answer displayed
 
-        btn = $('<br><br><button type="button" class="btn btn-info answerBtn" id="' + questionLetter + '">' + answerText + '</button><br>'); // gives unique letter ID for the if conditional on finding the right answer
+        btn = $('<br><button type="button" class="btn btn-secondary answerBtn" id="' + questionLetter + '">' + answerText + '</button><br>'); // gives unique letter ID for the if conditional on finding the right answer
         
         btn.on("click", clickHdlr); //on click function for btn
         answerHTML.append(btn); //displays btn to the "answers" div tag

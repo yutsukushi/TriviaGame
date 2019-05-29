@@ -1,1 +1,3 @@
 # TriviaGame
+
+These questions directly represent the trivia questions article on Reader's Digest called "24 Trivia Questions Only Geniuses Will Get Right" by Meghan Jones and Lauren Cahn. Direct link of the article will be shown at the end of the game, so the answers will not get revealed! Good luck!
