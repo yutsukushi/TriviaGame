@@ -15,60 +15,7 @@ var questionHTML = $(".question");
 var answerHTML = $(".answers");
 var displayTimer = $(".displayTimer");
 
-//-----------------------------------------------------------------------
-
-$(document).ready(function() { //once page is fully loaded, then the game is ready to begin.
-
-$("#start").on("click", function(){ //once "start" is clicked, 
-
-$("p").empty(); //empties the child of the p tag
-$("#start").remove(); //removes the parent and child of button
-
-timerStart(); //calls timerStart function
-displayQuestions(); //calls displayQuestions function
-
-});
-
-function timerStart() { //timer countdown decrements by 1 unit per second,
-   timer = allowedTime;
-   clearInterval(countdown);
-   countdown = setInterval(timerCountdown, 1000);
-   timerCountdown();
-
-}
-
-function timerCountdown() { 
-
-    timer--; //timer decrements from 30seconds
-
-    if (timer === 0) { //if timer hits 0,
-
-        clearInterval(countdown); //stop counter at 0
-
-        unanswered++; //increments unanswered counter by 1
-
-        clearQuestion(); //calls clearQuestion function to empty the HTML tags
-
-        pTag.append("You ran out of time! The correct answer is " + questionObjs[i].correct); //displays that you ran out of time, and displays correct answer
-
-        //needs to be connected to a setTimeOut to move onto the next question.
-            
-        console.log("Unanswered: " + unanswered);
-    }
-
-    displayTimer.html("Time left: " + timer); //displays the timer countdown on displayTimer div tag
-
-}
-
-function displayQuestions() { // loops through all objects in questionObjs
-
-    //set up an object with questions and the corresponding answers, and display a question at a time.
-    //set up a variable with the index 
-    //if question is answered, display answer
-    //move onto next question after alotted time.
-    // increment index so it chooses the next question in object array
-
-    questionObjs = [{
+var  questionObjs = [{
     q: "What is the only U.S. state that borders another state?",
     correct: "b",
     answers: {
@@ -116,65 +63,136 @@ function displayQuestions() { // loops through all objects in questionObjs
     }
 }];
 
-displayQuestion(questionObjs[i], answerClickHandler);
-    // wait for the next question
 
-    function answerClickHandler() {
-        console.log(this.id);
-        clearQuestion();
-        if (this.id === questionObjs[i].correct) { //if the button clicked has a value, you're right!
-            
-            correct++; //increments 1, to the correct counter
+//-----------------------------------------------------------------------
 
-            pTag.append("You're correct!"); //"Correct!"
-            
-            console.log("right: " + correct);
-            
-        } else {
+$(document).ready(function() { //once page is fully loaded, then the game is ready to begin.
 
-            wrong++; //incremenets 1, to the wrong counter
+$("#start").on("click", function(){ //once "start" is clicked, 
 
-            pTag.append("Oops! The correct answer is " + questionObjs[i].correct); //display the correct result
-            
-            console.log("wrong: " + wrong);
-        
-        }
+$("p").empty(); //empties the child of the p tag
+$("#start").remove(); //removes the parent and child of button
 
+timerStart(); //calls timerStart function
+displayQuestions(); //calls displayQuestions function
+
+});
+
+function timerStart() { //timer countdown decrements by 1 unit per second,
+
+   timer = allowedTime;
+   clearInterval(countdown);
+   countdown = setInterval(timerCountdown, 1000);
+   timerCountdown();
+
+}
+
+function timerCountdown() { 
+    
+    timer--; //timer decrements from 30seconds
+
+    if (timer === 0) { //if timer hits 0,
+
+        clearInterval(countdown); //stop counter at 0
+
+        unanswered++; //increments unanswered counter by 1
+
+        clearQuestion(); //calls clearQuestion function to empty the HTML tags
+
+        pTag.append("You ran out of time! The correct answer is " + questionObjs[i].correct); //displays that you ran out of time, and displays correct answer
+
+        //needs to be connected to a setTimeOut to move onto the next question.
         setTimeout(function(){
 
-            i++; //increments index by 1
-
-            if (i >= questionObjs.length) { //if index is greater than or equal to the length of the question object,
-
-                var endResults = $(".endResults");
-                var tryAgainBtn = $('<br><br><button type="button" class="btn btn-info" id="tryAgain">' + "Try again?" + '</button><br>'); //try again button
-
-                endResults.append("This is how you did...<br>Correct: " + correct + "<br>Incorrect: " + wrong + "<br>Unanswered: " + unanswered); //then display the results of the trivia questions
-                endResults.append('<br><br><a href="https://www.rd.com/culture/trivia-questions/">https://www.rd.com/culture/trivia-questions/</a>'); //and display the link to the actual article where I got the questions from
-
-                tryAgainBtn.on("click", function() { //when the user clicks the "try again" button
-
-                    tryAgainBtn.empty(); //get rid of the button
-                    endResults.empty(); //get rid of the results
-
-                    tryAgain(); //reset the counters, timer, and show the questions
-
-                })
-
-                endResults.append(tryAgainBtn); //display the "try again" button to the end results div tag
+            pTag.empty();
             
-            } else { //if index isn't greater than the object length, 
+            i++;
 
-                displayQuestion(questionObjs[i], answerClickHandler); //then continue to display the next question and the right answer page
+            displayQuestion(questionObjs[i], answerClickHandler);
+            
+        }, 1000);
 
-            }
-            
-            pTag.empty(); //empty p tag for an empty p section
-            
-        }, 1000); //time out to apply the changes
+        console.log("Unanswered: " + unanswered);
+
+    } else if (i >= questionObjs.length) {
+
+        clearInterval(countdown);
+        answerClickHandler();
 
     }
+
+    displayTimer.html("Time left: " + timer); //displays the timer countdown on displayTimer div tag
+
+}
+
+function displayQuestions() { // loops through all objects in questionObjs
     
+    //set up an object with questions and the corresponding answers, and display a question at a time.
+    //set up a variable with the index 
+    //if question is answered, display answer
+    //move onto next question after alotted time.
+    // increment index so it chooses the next question in object array
+    
+    displayQuestion(questionObjs[i], answerClickHandler);
+    // wait for the next question
+
+}
+    
+function answerClickHandler() {
+    console.log(this.id);
+    clearQuestion();
+    clearInterval();
+    if (this.id === questionObjs[i].correct) { //if the (this)button clicked has a value, you're right!
+        
+        correct++; //increments 1, to the correct counter
+
+        pTag.append("You're correct!"); //"Correct!"
+        
+        console.log("right: " + correct);
+        
+    } else {
+
+        wrong++; //incremenets 1, to the wrong counter
+
+        pTag.append("Oops! The correct answer is " + questionObjs[i].correct); //display the correct result
+        
+        console.log("wrong: " + wrong);
+    
+    }
+
+    setTimeout(function(){
+
+        i++; //increments index by 1
+
+        if (i >= questionObjs.length) { //if index is greater than or equal to the length of the question object,
+
+            var endResults = $(".endResults");
+            var tryAgainBtn = $('<br><br><button type="button" class="btn btn-info" id="tryAgain">' + "Try again?" + '</button><br>'); //try again button
+
+            endResults.append("This is how you did...<br>Correct: " + correct + "<br>Incorrect: " + wrong + "<br>Unanswered: " + unanswered); //then display the results of the trivia questions
+            endResults.append('<br><br><a href="https://www.rd.com/culture/trivia-questions/">https://www.rd.com/culture/trivia-questions/</a>'); //and display the link to the actual article where I got the questions from
+
+            tryAgainBtn.on("click", function() { //when the user clicks the "try again" button
+
+                tryAgainBtn.empty(); //get rid of the button
+                endResults.empty(); //get rid of the results
+
+                tryAgain(); //reset the counters, timer, and show the questions
+
+            });
+
+            endResults.append(tryAgainBtn); //display the "try again" button to the end results div tag
+        
+        } else { //if index isn't greater than the object length, 
+
+            displayQuestion(questionObjs[i], answerClickHandler); //then continue to display the next question and the right answer page   
+            
+        }
+        
+        pTag.empty(); //empty p tag for an empty p section
+        
+    }, 1000); //time out to apply the changes
+
 }
 
 function displayQuestion(questionObj, clickHdlr) { //displays question with corresponding answer buttons
@@ -187,7 +205,7 @@ function displayQuestion(questionObj, clickHdlr) { //displays question with corr
 
         var answerText = questionObj.answers[questionLetter]; //holds the letter value for every answer displayed
 
-        var btn = $('<br><br><button type="button" class="btn btn-info answerBtn" id="' + questionLetter + '">' + answerText + '</button><br>'); // gives unique letter ID for the if conditional on finding the right answer
+        btn = $('<br><br><button type="button" class="btn btn-info answerBtn" id="' + questionLetter + '">' + answerText + '</button><br>'); // gives unique letter ID for the if conditional on finding the right answer
         
         btn.on("click", clickHdlr); //on click function for btn
         answerHTML.append(btn); //displays btn to the "answers" div tag
@@ -209,6 +227,7 @@ function tryAgain() { //resets counters
     correct = 0; 
     wrong = 0;
     unanswered = 0;
+    i = 0;
 
     displayTimer.show(); //shows timer on HTML again
     timerStart(); //starts timer
