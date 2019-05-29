@@ -1,6 +1,6 @@
 // GLOBAL VARIABLES
 
-var allowedTime = 5;
+var allowedTime = 30;
 
 var timer = allowedTime;
 var countdown;
@@ -26,7 +26,7 @@ var  questionObjs = [{
     }
        
 }, {
-    q: "Name the number that is three more than one-fifth of one-tenth of one-half of 5,000",
+    q: "Name the number that is three more than one-fifth of one-tenth of one-half of 5,000.",
     correct: "c",
     answers: {
         a: "A: " + 503,
@@ -47,7 +47,7 @@ var  questionObjs = [{
     q: "What's the oldest continuously inhabited city in the world?",
     correct: "d",
     answers: {
-        a: "A: Istanbul, Turky",
+        a: "A: Istanbul, Turkey",
         b: "B: Athens, Greece",
         c: "C: Jerusalem",
         d: "D: Damascus, Syria" //answer
@@ -110,7 +110,7 @@ function timerCountdown() {
 
             displayQuestion(questionObjs[i], answerClickHandler);
             
-        }, 1000);
+        }, 3000);
 
         console.log("Unanswered: " + unanswered);
 
@@ -118,7 +118,6 @@ function timerCountdown() {
 
         clearInterval(countdown);
         answerClickHandler();
-
     }
 
     displayTimer.html("Time left: " + timer); //displays the timer countdown on displayTimer div tag
@@ -141,7 +140,6 @@ function displayQuestions() { // loops through all objects in questionObjs
 function answerClickHandler() {
     console.log(this.id);
     clearQuestion();
-    clearInterval();
     if (this.id === questionObjs[i].correct) { //if the (this)button clicked has a value, you're right!
         
         correct++; //increments 1, to the correct counter
@@ -170,7 +168,7 @@ function answerClickHandler() {
             var tryAgainBtn = $('<br><br><button type="button" class="btn btn-info" id="tryAgain">' + "Try again?" + '</button><br>'); //try again button
 
             endResults.append("This is how you did...<br>Correct: " + correct + "<br>Incorrect: " + wrong + "<br>Unanswered: " + unanswered); //then display the results of the trivia questions
-            endResults.append('<br><br><a href="https://www.rd.com/culture/trivia-questions/">https://www.rd.com/culture/trivia-questions/</a>'); //and display the link to the actual article where I got the questions from
+            endResults.append('<br><br>These trivia questions came from <a href="https://www.rd.com/culture/trivia-questions/">https://www.rd.com/culture/trivia-questions/</a> They have a lot more tricky questions!'); //and display the link to the actual article where I got the questions from
 
             tryAgainBtn.on("click", function() { //when the user clicks the "try again" button
 
@@ -191,7 +189,7 @@ function answerClickHandler() {
         
         pTag.empty(); //empty p tag for an empty p section
         
-    }, 1000); //time out to apply the changes
+    }, 3000); //time out to apply the changes
 
 }
 
