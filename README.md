@@ -11,6 +11,7 @@ https://yutsukushi.github.io/TriviaGame/
 * JavaScript
 * HTML
 * CSS
+* BootStrap
 
 ## Credits
 
